@@ -1,0 +1,9 @@
+pylint
+flake8
+pytest
+click
+black
+pytest-cov
+pandas == 2.3.2
+numpy == 2.3.0
+matplotlib == 3.10.6
