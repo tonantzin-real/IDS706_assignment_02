@@ -20,3 +20,18 @@ More information about the dataset can be found [here](https://www.uscis.gov/too
 
  I selected the information from fiscal year 2022 until 2025 (Q3).
 
+
+### <ins>WHAT DID I DO?</ins>
+- I cleaned the column names and imputed missing values depending on the column dtype 
+> None of the variables had more than 1% of missing values
+- For each variable, I looked at its .describe()
+- I dropped certain columns
+- I cleaned Industry_NAICS_Code and saved the result in another column
+- I calculated how many approvals and denials there were by fiscal years. I considered all the columns that contained `_Approval` and `_Denial`
+> The approval rate for each year was over 96%. This number caught my eye but due to time restrictions I didn't look at it further
+![Approval Rate by Fiscal Year](img/lineplot_rate_Approval_Rate.png)
+> This was done using **pandas**
+- I looked at the Approval Rate for each fiscal year for North Carolina, California and New York
+> The 3 states increased their approval rate in 2024
+> This was done using **polars**
+- For the **modeling** part I ran a simple Random Forest with ChatGPT's help

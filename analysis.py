@@ -156,7 +156,8 @@ if __name__ == "__main__":
     print(df_approval_denial[df_approval_denial.Petitioner_State == state])
 
 
-
-# Modeling
+    # Modeling
+    df_['target'] = (df_['New_Employment_Approval'] > 0).astype(int)
+    print(df_.target.value_counts(normalize=True))
 
     import pdb;pdb.set_trace()
