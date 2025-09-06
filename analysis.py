@@ -1,4 +1,4 @@
-import pdb
+# import pdb
 import pandas as pd
 import polars as pl
 import matplotlib.pyplot as plt
@@ -7,7 +7,6 @@ import seaborn as sns
 from typing import List
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
-from sklearn.impute import SimpleImputer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import (
     accuracy_score,
@@ -23,12 +22,15 @@ def read_file(file_path: str) -> DataFrame:
     and cleans column names"""
     file_extension = file_path.split(".")[-1]
     if file_extension == "csv":
-        df = pd.read_csv(file_path, encoding="utf-16le", sep="\t", low_memory=False)
+        df = pd.read_csv(
+            file_path, encoding="utf-16le", sep="\t", low_memory=False
+        )
     elif file_extension == "parquet":
         df = pd.read_parquet(file_path)
     else:
         raise ValueError(
-            f"The extension can only be .csv or .parquet and it is {file_extension}"
+            f"The extension can only be .csv or \
+            .parquet and it is {file_extension}"
         )
     print(f"Size: {df.shape}")
     print(df.head().to_string())
@@ -66,7 +68,8 @@ def missing_values(df: DataFrame, column: str) -> DataFrame:
 
 
 def preprocess_dataframe(df: DataFrame) -> DataFrame:
-    """For a given dataframe it cleans the column names, fills in the missing values,
+    """For a given dataframe it cleans the column names,
+    fills in the missing values,
     describes its values, and checks that there're no duplicates"""
     df = preprocess_column_names(df)
     for col in df.columns:
@@ -80,14 +83,16 @@ def preprocess_dataframe(df: DataFrame) -> DataFrame:
 def groupby_information(
     df: DataFrame, groupby_col: List[str], aggregate_cols: List[str]
 ) -> DataFrame:
-    """Returns a dataframe that has aggregated information given a certain grouped column using PANDAS"""
+    """Returns a dataframe that has aggregated information
+    given a certain grouped column using PANDAS"""
     return df.groupby(groupby_col)[aggregate_cols].sum()
 
 
 def groupby_information_polars(
     df: DataFrame, groupby_col: List[str], aggregate_cols: List[str]
 ) -> DataFrame:
-    """Returns a dataframe that has aggregated information given a certain grouped column using POLARS"""
+    """Returns a dataframe that has aggregated information
+    given a certain grouped column using POLARS"""
     # This was done with ChatGPTs help
     # I first convert the df (pandas) to a polars df
     df_polars = pl.from_pandas(df)
@@ -100,7 +105,12 @@ def plot_rate(df: DataFrame, x_col: str, y_col: str, save_path: str) -> str:
     """Plots a variable's rate"""
     save_path = save_path + f"lineplot_rate_{y_col}.png"
     sns.lineplot(
-        x=df[x_col], y=df[y_col], marker="o", color="g", linestyle="-", linewidth=2
+        x=df[x_col],
+        y=df[y_col],
+        marker="o",
+        color="g",
+        linestyle="-",
+        linewidth=2,
     )
     plt.title(f"{y_col} by {x_col}")
     plt.xlabel(x_col)
@@ -127,7 +137,11 @@ if __name__ == "__main__":
         df[col] = df[col].astype(str).str.replace(",", "").astype(int)
 
     # We drop certain columns
-    rmv_cols = ["Line_by_line", "Employer_Petitioner_Name", "Industry_NAICS_Code"]
+    rmv_cols = [
+        "Line_by_line",
+        "Employer_Petitioner_Name",
+        "Industry_NAICS_Code",
+    ]
     df_ = df.drop(columns=rmv_cols)
 
     approval_cols_ = df_.filter(like="Approval").columns.tolist()
@@ -136,13 +150,15 @@ if __name__ == "__main__":
     print(f"df with original columns: {df.shape}")
     print(f"df with dropped columns: {df_.shape}")
 
-    ############################################################################## PANDAS
+    # PANDAS
     # How many approvals and denials (new and continuation) were there by year?
     appr_cols = ["New_Employment_Approval", "Continuation_Approval"]
     den_cols = ["New_Employment_Denial", "Continuation_Denial"]
 
     df_approval_denial = groupby_information(
-        df=df_, groupby_col=["Fiscal_Year"], aggregate_cols=appr_cols + den_cols
+        df=df_,
+        groupby_col=["Fiscal_Year"],
+        aggregate_cols=appr_cols + den_cols,
     )
     # pdb.set_trace()
     # Total number of new and continuation applications (approvals + denials)
@@ -166,7 +182,7 @@ if __name__ == "__main__":
         save_path=save_path,
     )
 
-    ############################################################################## POLARS
+    # POLARS
     # How do the approvals and denials look by fiscal year and state?
 
     # First I want to see how the result would look using Pandas
@@ -194,12 +210,16 @@ if __name__ == "__main__":
     #   North Carolina
     state = "NC"
     print(state)
-    print(df_approval_denial[df_approval_denial.Petitioner_State == state], "\n")
+    print(
+        df_approval_denial[df_approval_denial.Petitioner_State == state], "\n"
+    )
 
     #   California
     state = "CA"
     print(state)
-    print(df_approval_denial[df_approval_denial.Petitioner_State == state], "\n")
+    print(
+        df_approval_denial[df_approval_denial.Petitioner_State == state], "\n"
+    )
 
     #   New York
     state = "NY"
@@ -216,15 +236,19 @@ if __name__ == "__main__":
 
     # Total number of new and continuation applications (approvals + denials)
     df_approval_denial_pl = df_approval_denial_pl.with_columns(
-        [pl.sum_horizontal(pl.col(appr_cols + den_cols)).alias("Total_Applications")]
+        [
+            pl.sum_horizontal(pl.col(appr_cols + den_cols)).alias(
+                "Total_Applications"
+            )
+        ]
     )
 
     # Calculate the approval rate (approvals / total applications)
     df_approval_denial_pl = df_approval_denial_pl.with_columns(
         [
-            (pl.sum_horizontal(appr_cols) / pl.col("Total_Applications")).alias(
-                "Approval_Rate"
-            )
+            (
+                pl.sum_horizontal(appr_cols) / pl.col("Total_Applications")
+            ).alias("Approval_Rate")
         ]
     )
 
@@ -236,12 +260,16 @@ if __name__ == "__main__":
     #   North Carolina
     state = "NC"
     print(state)
-    print(df_approval_denial_pl.filter(pl.col("Petitioner_State") == state), "\n")
+    print(
+        df_approval_denial_pl.filter(pl.col("Petitioner_State") == state), "\n"
+    )
 
     #   California
     state = "CA"
     print(state)
-    print(df_approval_denial_pl.filter(pl.col("Petitioner_State") == state), "\n")
+    print(
+        df_approval_denial_pl.filter(pl.col("Petitioner_State") == state), "\n"
+    )
 
     #   New York
     state = "NY"
@@ -257,7 +285,9 @@ if __name__ == "__main__":
     # This was done using, mostly, ChatGPT
     # Encode categorical features
     label_encoder = LabelEncoder()
-    df_["Petitioner_State"] = label_encoder.fit_transform(df_["Petitioner_State"])
+    df_["Petitioner_State"] = label_encoder.fit_transform(
+        df_["Petitioner_State"]
+    )
     df_["NAICS_Code"] = label_encoder.fit_transform(df_["NAICS_Code"])
 
     # Dependent and independent variables

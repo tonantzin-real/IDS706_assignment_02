@@ -1,6 +1,13 @@
 import pandas as pd
 import os
-from analysis import *
+from analysis import (
+    read_file,
+    preprocess_column_names,
+    missing_values,
+    preprocess_dataframe,
+    groupby_information,
+    groupby_information_polars,
+)
 
 
 def test_read_file():
@@ -36,7 +43,9 @@ def test_missing_values():
     # Test column 'Column 1'
     df_cleaned = missing_values(df, "Column 1")
     assert df_cleaned["Column 1"].isna().sum() == 0
-    assert df_cleaned["Column 1"].iloc[1] == -1  # The 2 value from Column 1 was None
+    assert (
+        df_cleaned["Column 1"].iloc[1] == -1
+    )  # The 2 value from Column 1 was None
 
     # Test column 'Column 2'
     df_cleaned = missing_values(df, "Column 2")
@@ -84,7 +93,8 @@ def test_groupby_information():
     assert result.shape == (
         2,
         4,
-    )  # Two fiscal years, four aggregated columns, plus the groupby column (this doesn't appear)
+    )  # Two fiscal years, four aggregated columns,
+    #   plus the groupby column (this doesn't appear)
     assert "Continuation_Denial" in result.columns
     assert "New_Employment_Approval" in result.columns
 

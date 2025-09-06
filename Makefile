@@ -4,7 +4,7 @@ install:								# Updates pip to the latest version and installs the requirement
 	pip install --upgrade pip && pip install -r requirements.txt
 
 format:									# Reformats the Python files to follow black's styling rules
-	black *.py
+	black --line-length 79 *.py
 
 lint:									# Keeps the code clean and consistent by flagging issues like: incorrect indentation, Line too long, etc
 	flake8 analysis.py
