@@ -1,8 +1,14 @@
 import pandas as pd
+import polars as pl
 import matplotlib.pyplot as plt
 from pandas import DataFrame
 import seaborn as sns
 from typing import List
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.impute import SimpleImputer
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 
 
 def read_file(file_path: str) -> DataFrame:
@@ -160,4 +166,42 @@ if __name__ == "__main__":
     df_['target'] = (df_['New_Employment_Approval'] > 0).astype(int)
     print(df_.target.value_counts(normalize=True))
 
+    # Encode categorical features
+    label_encoder = LabelEncoder()
+    df_['Petitioner_State'] = label_encoder.fit_transform(df_['Petitioner_State'])
+    df_['NAICS_Code'] = label_encoder.fit_transform(df_['NAICS_Code'])
+
+    # Dependent and independent variables
+    X = df_[['Fiscal_Year', 'Petitioner_State', 'NAICS_Code']]
+    y = df_['target']
+
+    # Split into train and test sets
+    seed = 2025
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=seed)
+
+    # Initialize the Random Forest model
+    model = RandomForestClassifier(n_estimators=100, random_state=42)
+
+    # Train the model
+    model.fit(X_train, y_train)
+
+    # Predict on the test set
+    y_pred = model.predict(X_test)
+
+    # Evaluate the model
+    accuracy = accuracy_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred)
+    recall = recall_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred)
+
+    # Print the evaluation metrics
+    print(f'Accuracy: {accuracy}')
+    print(f'Precision: {precision}')
+    print(f'Recall: {recall}')
+    print(f'F1 Score: {f1}')
+
+    # Confusion Matrix
+    cm = confusion_matrix(y_test, y_pred)
+    print("Confusion Matrix:")
+    print(cm)
     import pdb;pdb.set_trace()

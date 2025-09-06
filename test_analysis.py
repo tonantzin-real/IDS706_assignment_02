@@ -1,4 +1,4 @@
-from IDS706_assignment_02.utils import say_hello, add, another_function
+import IDS706_assignment_02.utils 
 
 
 def test_say_hello():

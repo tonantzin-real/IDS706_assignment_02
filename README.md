@@ -39,3 +39,4 @@ More information about the dataset can be found [here](https://www.uscis.gov/too
 
 > This was done using **polars**
 - For the **modeling** part I ran a simple Random Forest with ChatGPT's help
+> The 4 metrics I calculated (accuracy, precision, recall, f1) had a value of 54%-55%
