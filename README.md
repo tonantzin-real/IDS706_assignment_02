@@ -26,8 +26,8 @@ More information about the dataset can be found [here](https://www.uscis.gov/too
 > None of the variables had more than 1% of missing values
 - For each variable, I looked at its .describe()
 - I dropped certain columns
-- I cleaned Industry_NAICS_Code and saved the result in another column
-- I calculated how many approvals and denials there were by fiscal years. I considered all the columns that contained `_Approval` and `_Denial`
+- I cleaned `Industry_NAICS_Code` and saved the result in another column
+- I calculated how many approvals and denials there were by fiscal year. I considered all the columns that contained `_Approval` and `_Denial`
 > The approval rate for each year was over 96%. This number caught my eye but due to time restrictions I didn't look at it further
 
 

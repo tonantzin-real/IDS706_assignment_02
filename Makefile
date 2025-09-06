@@ -8,6 +8,7 @@ format:									# Reformats the Python files to follow black's styling rules
 
 lint:									# Keeps the code clean and consistent by flagging issues like: incorrect indentation, Line too long, etc
 	flake8 analysis.py
+	flake8 test_analysis.py
 
 test:									# Runs .py (if I had another line below with a different .py it will also run it)
 	python -m pytest -vv --cov=hello test_analysis.py
