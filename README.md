@@ -49,6 +49,7 @@ The instructions were:
 
 
 This was done previously and all the tests passed:
+
 ![Passed tests!](img/passed_tests.png)
 
 
