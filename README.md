@@ -56,3 +56,34 @@ This was done previously and all the tests passed:
 2. **Dev Environment Setup:** A fully functional Dev Container or Docker setup (3 bonus points for both Docker and Dev Container), with requirement file, devcontainer.json/Docker files, ensuring all dependencies correctly installed and clear instructions for building, running, and using the environment.
 
 The steps for de dev environment setup are the following:
+
+### I. Creating a dev container
+1. Press `cmd + shift + p` and search for **Add Dev Container Configuration Files**
+2. Select **Add configuration to workspace**
+3. Select **Python 3** (or the configuration based on your needs)
+4. Select the default Python version (just click enter)
+5. Select nothing (or, if needed, select additional features to install)
+6. Select nothing (or, if needed, include the optional files/directories)
+> This created the base **devcontainer** and was added to a `devcontainer` folder
+
+The resulting files from this step are: `devcontainer` folder > `devcontainer.json`
+
+![devcontainer.json](devcontainer_json.png)
+
+### II. Opening the dev container
+1. Select the blue arrows from the left lower bound of VSCode
+2. Select **Reopen in Container**
+> This will allow us to *reopen* the container, now in Docker (it will look the same)
+> Conversely, once we are in Docker we can reopen the container locally by doing `cmd + shift + p` and selecting **Dev Containers: Reopen Folder Locally**
+Now on Docker we can see our Container (distracted_chaplygin)
+![Container](container_docker.png)
+
+### III. Building an image from Dockerfile
+1. Press `cmd + shift + p` and select **Containers: Add Docker Files to Workspace**
+2. In the terminal run `docker build -t image-name .` (distracted_chaplygin in our case)
+> Builds an image from the Dockerfile and executes all the steps
+3. Run `docker run -d -p 8088:3000 --name container-name image-name`
+> Runs the container in the back **-d**, maps port **8088** on my host to port **3000** in the container and names the container **container-name**
+
+Now the container was created:
+![Created container](container_created.png)
