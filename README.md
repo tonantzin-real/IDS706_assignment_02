@@ -40,3 +40,18 @@ More information about the dataset can be found [here](https://www.uscis.gov/too
 > This was done using **polars**
 - For the **modeling** part I ran a simple Random Forest with ChatGPT's help
 > The 4 metrics I calculated (accuracy, precision, recall, f1) had a value of 54%-55%
+
+## Assignment 3
+The instructions were:
+> This assignment is the second part of your two-week project. You will now focus on making your data analysis project reproducible and testable. You’ll write basic unit tests for your data analysis functions and set up a development environment using either Dev Container or Docker. It should be in the same Github Repository you created last week.
+
+> **Test Coverage:** Includes meaningful unit and system tests that validate core functions such as data loading, filtering, grouping, preprocessing, and machine learning model behavior, with clear structure and edge case handling. Make sure all tests pass.
+
+
+This was done previously and all the tests passed:
+![Passed tests!](img/passed_tests.png)
+
+
+> **Dev Environment Setup:** A fully functional Dev Container or Docker setup (3 bonus points for both Docker and Dev Container), with requirement file, devcontainer.json/Docker files, ensuring all dependencies correctly installed and clear instructions for building, running, and using the environment.
+
+The steps for de dev environment setup are the following:
