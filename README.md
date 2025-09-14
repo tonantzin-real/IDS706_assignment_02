@@ -57,33 +57,56 @@ This was done previously and all the tests passed:
 
 The steps for de dev environment setup are the following:
 
-### I. Creating a dev container
-1. Press `cmd + shift + p` and search for **Add Dev Container Configuration Files**
-2. Select **Add configuration to workspace**
-3. Select **Python 3** (or the configuration based on your needs)
-4. Select the default Python version (just click enter)
-5. Select nothing (or, if needed, select additional features to install)
-6. Select nothing (or, if needed, include the optional files/directories)
-> This created the base **devcontainer** and was added to a `devcontainer` folder
 
-The resulting files from this step are: `devcontainer` folder > `devcontainer.json`
+### I. Creating a dev container
+**Purpose:** Set up a consistent development environment using Docker containers
+1. Press `Cmd + Shift + P` and search for **Dev Containers: Add Dev Container Configuration Files**
+2. Select **Add configuration to workspace**
+3. Select **Python 3**
+4. Select the default Python version (press enter)
+5. Select additional features if needed (or nothing)
+6. Select optional files to include (or nothing)
+
+> 📁 This creates a `.devcontainer` folder with `devcontainer.json` - the development environment configuration
 
 ![devcontainer.json](devcontainer_json.png)
 
+
 ### II. Opening the dev container
-1. Select the blue arrows from the left lower bound of VSCode
+**Purpose:** Launch and work within the Docker-based *development* environment
+1. Click the blue arrows in the lower-left corner of VS Code
 2. Select **Reopen in Container**
 > This will allow us to *reopen* the container, now in Docker (it will look the same)
-> Conversely, once we are in Docker we can reopen the container locally by doing `cmd + shift + p` and selecting **Dev Containers: Reopen Folder Locally**
-Now on Docker we can see our Container (distracted_chaplygin)
+> Conversely, once we are in Docker we can reopen the container locally by doing `Cmd + Shift + P` and selecting **Dev Containers: Reopen Folder Locally**
+3. Wait for the container to build and start
+> VS Code automatically handles the Docker image building and container creation process in the background
+> The first time may take several minutes as it downloads the base image and installs dependencies
+Subsequent openings will be much faster due to Docker's layer caching
+
+Now on Docker we can see our Container (e.g., `angry_noyce`)
 ![Container](container_docker.png)
 
-### III. Building an image from Dockerfile
-1. Press `cmd + shift + p` and select **Containers: Add Docker Files to Workspace**
-2. In the terminal run `docker build -t image-name .` (distracted_chaplygin in our case)
-> Builds an image from the Dockerfile and executes all the steps
-3. Run `docker run -d -p 8088:3000 --name container-name image-name`
-> Runs the container in the back **-d**, maps port **8088** on my host to port **3000** in the container and names the container **container-name**
+### III. Creating a Dockerfile
+**Purpose:** Create a production-ready container configuration for deployment
+1. Press `Cmd + Shift + P` and select **Containers: Add Docker Files to Workspace**
+2. Select **Python: General** in Select Application Platform
+3. Select **test_analysis.py** or the main.py for Choose The App's Entry Point
+4. Select **No** for Include optional Docker Compose Files
+> 🐳 This creates a Dockerfile in your project root - your production container blueprint
 
-Now the container was created:
+### IV. Building an image from Dockerfile
+**Purpose:** Create and *deploy* the application as a standalone Docker container
+1. In the terminal run `docker build -t image-name .` (e.g., `ids_assignment_3` in our case)
+> *Builds a Docker image from your Dockerfile instructions*
+3. Run `docker run -d -p 8088:3000 --name container-name image-name` (e.g., `my_container` in our case)
+> *Launch a container from your built image with specific settings*
+> 🚀 Flags explanation:
+> - **-d:** Run in detached mode (background process)
+> - **-p 8088:3000:** Map host port 8088 to container port 3000
+> - **--name:** Assign a recognizable name to your container
+
+Now the production container is running:
 ![Created container](container_created.png)
+
+And we verified successful execution:
+![Container worked](container_worked.png)
