@@ -69,7 +69,7 @@ The steps for de dev environment setup are the following:
 
 > 📁 This creates a `.devcontainer` folder with `devcontainer.json` - the development environment configuration
 
-![devcontainer.json](devcontainer_json.png)
+![devcontainer.json](img/devcontainer_json.png)
 
 
 ### II. Opening the dev container
@@ -84,7 +84,7 @@ The steps for de dev environment setup are the following:
 Subsequent openings will be much faster due to Docker's layer caching
 
 Now on Docker we can see our Container (e.g., `angry_noyce`)
-![Container](container_docker.png)
+![Container](img/container_docker.png)
 
 ### III. Creating a Dockerfile
 **Purpose:** Create a production-ready container configuration for deployment
@@ -106,7 +106,7 @@ Now on Docker we can see our Container (e.g., `angry_noyce`)
 > - **--name:** Assign a recognizable name to your container
 
 Now the production container is running:
-![Created container](container_created.png)
+![Created container](img/container_created.png)
 
 And we verified successful execution:
-![Container worked](container_worked.png)
+![Container worked](img/container_worked.png)
