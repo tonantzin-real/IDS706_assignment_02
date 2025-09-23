@@ -1,4 +1,7 @@
 # IDS706_assignment_02
+
+[![Repository for assignment 2](https://github.com/tonantzin-real/IDS706_assignment_02/actions/workflows/main.yml/badge.svg)](https://github.com/tonantzin-real/IDS706_assignment_02/actions/workflows/main.yml)
+
 This is a repository for [assignment 2](https://canvas.duke.edu/courses/60978/assignments/282604) and [assignment 3](https://canvas.duke.edu/courses/60978/assignments/283786):
 
 > Choose a beginner-friendly dataset from sources like Kaggle or public APIs. Perform basic data analysis using Pandas and Polars. This includes:
