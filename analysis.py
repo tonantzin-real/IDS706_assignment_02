@@ -120,6 +120,15 @@ def plot_rate(df: DataFrame, x_col: str, y_col: str, save_path: str) -> str:
     plt.savefig(save_path, format="png", bbox_inches="tight")
 
 
+def calculate_approval_metrics(df, approval_columns):
+    """Calculate total applications and approval rate"""
+    df["Total_Applications"] = df.sum(axis=1)
+    df["Approval_Rate"] = (
+        df[approval_columns].sum(axis=1) / df["Total_Applications"]
+    )
+    return df
+
+
 if __name__ == "__main__":
     file_path = "./data/2022_2025_Employer_Information.csv"
     save_path = "./img/"
@@ -137,37 +146,34 @@ if __name__ == "__main__":
         df[col] = df[col].astype(str).str.replace(",", "").astype(int)
 
     # We drop certain columns
-    rmv_cols = [
+    columns_to_remove = [
         "Line_by_line",
         "Employer_Petitioner_Name",
         "Industry_NAICS_Code",
     ]
-    df_ = df.drop(columns=rmv_cols)
+    processed_data = df.drop(columns=columns_to_remove)
 
-    approval_cols_ = df_.filter(like="Approval").columns.tolist()
-    denial_cols_ = df_.filter(like="Denial").columns.tolist()
+    approval_cols_ = processed_data.filter(like="Approval").columns.tolist()
+    denial_cols_ = processed_data.filter(like="Denial").columns.tolist()
 
     print(f"df with original columns: {df.shape}")
-    print(f"df with dropped columns: {df_.shape}")
+    print(f"df with dropped columns: {processed_data.shape}")
 
     # PANDAS
     # How many approvals and denials (new and continuation) were there by year?
-    appr_cols = ["New_Employment_Approval", "Continuation_Approval"]
-    den_cols = ["New_Employment_Denial", "Continuation_Denial"]
+    approval_columns = ["New_Employment_Approval", "Continuation_Approval"]
+    denial_columns = ["New_Employment_Denial", "Continuation_Denial"]
 
     df_approval_denial = groupby_information(
-        df=df_,
+        df=processed_data,
         groupby_col=["Fiscal_Year"],
-        aggregate_cols=appr_cols + den_cols,
+        aggregate_cols=approval_columns + denial_columns,
     )
     # pdb.set_trace()
     # Total number of new and continuation applications (approvals + denials)
-    df_approval_denial["Total_Applications"] = df_approval_denial.sum(axis=1)
-
     # Calculate the approval rate (approvals / total applications)
-    df_approval_denial["Approval_Rate"] = (
-        df_approval_denial[appr_cols].sum(axis=1)
-        / df_approval_denial["Total_Applications"]
+    df_approval_denial = calculate_approval_metrics(
+        df_approval_denial, df_approval_denial
     )
 
     # Display the resulting DataFrame
@@ -188,18 +194,14 @@ if __name__ == "__main__":
     # First I want to see how the result would look using Pandas
     print("PANDAS")
     df_approval_denial = groupby_information(
-        df=df_,
+        df=processed_data,
         groupby_col=["Fiscal_Year", "Petitioner_State"],
-        aggregate_cols=appr_cols + den_cols,
+        aggregate_cols=approval_columns + denial_columns,
     )
 
     # Total number of new and continuation applications (approvals + denials)
-    df_approval_denial["Total_Applications"] = df_approval_denial.sum(axis=1)
-
-    # Calculate the approval rate (approvals / total applications)
-    df_approval_denial["Approval_Rate"] = (
-        df_approval_denial[appr_cols].sum(axis=1)
-        / df_approval_denial["Total_Applications"]
+    df_approval_denial = calculate_approval_metrics(
+        df_approval_denial, df_approval_denial
     )
 
     # Display the resulting DataFrame
@@ -229,15 +231,15 @@ if __name__ == "__main__":
     # Now I use Polars
     print("\nPOLARS")
     df_approval_denial_pl = groupby_information_polars(
-        df=df_,
+        df=processed_data,
         groupby_col=["Fiscal_Year", "Petitioner_State"],
-        aggregate_cols=appr_cols + den_cols,
+        aggregate_cols=approval_columns + denial_columns,
     )
 
     # Total number of new and continuation applications (approvals + denials)
     df_approval_denial_pl = df_approval_denial_pl.with_columns(
         [
-            pl.sum_horizontal(pl.col(appr_cols + den_cols)).alias(
+            pl.sum_horizontal(pl.col(approval_columns + denial_columns)).alias(
                 "Total_Applications"
             )
         ]
@@ -247,7 +249,8 @@ if __name__ == "__main__":
     df_approval_denial_pl = df_approval_denial_pl.with_columns(
         [
             (
-                pl.sum_horizontal(appr_cols) / pl.col("Total_Applications")
+                pl.sum_horizontal(approval_columns)
+                / pl.col("Total_Applications")
             ).alias("Approval_Rate")
         ]
     )
@@ -278,22 +281,26 @@ if __name__ == "__main__":
 
     # Modeling
     print("\nMODELING")
-    df_["target"] = (df_["New_Employment_Approval"] > 0).astype(int)
+    processed_data["target"] = (
+        processed_data["New_Employment_Approval"] > 0
+    ).astype(int)
     print("\nTarget distribution:")
-    print(df_.target.value_counts(normalize=True))
+    print(processed_data.target.value_counts(normalize=True))
 
     # This was done using, mostly, ChatGPT
     # Encode categorical features
     label_encoder = LabelEncoder()
-    df_["Petitioner_State"] = label_encoder.fit_transform(
-        df_["Petitioner_State"]
+    processed_data["Petitioner_State"] = label_encoder.fit_transform(
+        processed_data["Petitioner_State"]
     )
-    df_["NAICS_Code"] = label_encoder.fit_transform(df_["NAICS_Code"])
+    processed_data["NAICS_Code"] = label_encoder.fit_transform(
+        processed_data["NAICS_Code"]
+    )
 
     # Dependent and independent variables
     # I decided only to use this features
-    X = df_[["Fiscal_Year", "Petitioner_State", "NAICS_Code"]]
-    y = df_["target"]
+    X = processed_data[["Fiscal_Year", "Petitioner_State", "NAICS_Code"]]
+    y = processed_data["target"]
 
     # Split into train and test sets
     seed = 2025
