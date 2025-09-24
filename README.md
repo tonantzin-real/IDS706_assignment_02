@@ -118,6 +118,27 @@ And we verified successful execution:
 ## Assignment 4
 
 The instructions were:
-> This assignment is the second part of your two-week project. You will now focus on making your data analysis project reproducible and testable. You’ll write basic unit tests for your data analysis functions and set up a development environment using either Dev Container or Docker. It should be in the same Github Repository you created last week.
+> This is the final part of your two-week data analysis project. Your focus now is to automate the project, clean up the code, and enhance the content with your own innovation. Keep everything in the same GitHub repo you started two/three weeks ago.
 
+### 1. Add CI (Continuous Integration):
+1. Use GitHub Actions (or another CI tool).
+2. Add a .yaml file to set up the workflow.
+3. Ensure the workflow runs and passes.
+4. Add CI status badge in ReadMe file
+
+### 2. Refactor your code in VS Code, at least try rename and extract method/variable:
+1. Press F2, type the new desired name, and press Enter. All instances of the symbol across all files will be renamed.
+2. Select the Code Action light bulb or use the Quick Fix command ⌘. and choose extract method/variable
+
+### 3. Code Quality Tools: use black for formatting and flake8 for linting
+
+### 4. Commit and Document Changes:
+
+Workflow works: \
 ![CI workflow works!](img/workflow_works.png)
+
+Renamed features: \
+![Renamed features](img/rename_features.png)
+
+Extract methods: \
+![Extract method](img/extract_method.png)
