@@ -116,5 +116,8 @@ And we verified successful execution:
 
 
 ## Assignment 4
+
 The instructions were:
 > This assignment is the second part of your two-week project. You will now focus on making your data analysis project reproducible and testable. You’ll write basic unit tests for your data analysis functions and set up a development environment using either Dev Container or Docker. It should be in the same Github Repository you created last week.
+
+![CI workflow works!](img/workflow_works.png)
