@@ -2,7 +2,7 @@
 
 [![Repository for assignment 2](https://github.com/tonantzin-real/IDS706_assignment_02/actions/workflows/main.yml/badge.svg)](https://github.com/tonantzin-real/IDS706_assignment_02/actions/workflows/main.yml)
 
-This is a repository for [assignment 2](https://canvas.duke.edu/courses/60978/assignments/282604) and [assignment 3](https://canvas.duke.edu/courses/60978/assignments/283786):
+This is a repository for [assignment 2](https://canvas.duke.edu/courses/60978/assignments/282604), [assignment 3](https://canvas.duke.edu/courses/60978/assignments/283786) and [assignment 4](https://canvas.duke.edu/courses/60978/assignments/287231):
 
 > Choose a beginner-friendly dataset from sources like Kaggle or public APIs. Perform basic data analysis using Pandas and Polars. This includes:
 > 1. importing data
@@ -113,3 +113,8 @@ Now the production container is running:
 
 And we verified successful execution:
 ![Container worked](img/container_worked.png)
+
+
+## Assignment 4
+The instructions were:
+> This assignment is the second part of your two-week project. You will now focus on making your data analysis project reproducible and testable. You’ll write basic unit tests for your data analysis functions and set up a development environment using either Dev Container or Docker. It should be in the same Github Repository you created last week.

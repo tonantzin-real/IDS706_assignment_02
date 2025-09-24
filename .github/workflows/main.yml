@@ -8,17 +8,33 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
+        
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        
+    - name: Install testing tools
+      run: |
+        pip install pytest pytest-cov black flake8
+        
+    - name: Format check with black
+      run: |
+        black --check --line-length 79 analysis.py test_analysis.py
+        
     - name: Lint with flake8
       run: |
-        flake8 analysis.py
-        flake8 test_analysis.py
+        flake8 analysis.py test_analysis.py --ignore=E501,W503 
+        
     - name: Run tests
-      run: pytest --cov=hello
+      run: |
+        python -m pytest test_analysis.py -v --cov=analysis
+        
+    - name: Run make ci (optional - to test Makefile)
+      run: |
+        make ci

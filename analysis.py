@@ -61,7 +61,7 @@ def missing_values(df: DataFrame, column: str) -> DataFrame:
         imput = -1
     n = df.shape[0]
     missing_vals = df[column].isna().sum()
-    print(f"{missing_vals/n:.2}% are missing values")
+    print(f"{missing_vals / n:.2}% are missing values")
     df[column] = df[column].fillna(imput)
     assert df[column].isna().sum() == 0
     return df
@@ -318,10 +318,10 @@ if __name__ == "__main__":
 
     # Print the evaluation metrics
     print("\nEvaluation metrics")
-    print(f"Accuracy: \t{accuracy*100:.2f}%")
-    print(f"Precision: \t{precision*100:.2f}%")
-    print(f"Recall: \t{recall*100:.2f}%")
-    print(f"F1 Score: \t{f1*100:.2f}%")
+    print(f"Accuracy: \t{accuracy * 100:.2f}%")
+    print(f"Precision: \t{precision * 100:.2f}%")
+    print(f"Recall: \t{recall * 100:.2f}%")
+    print(f"F1 Score: \t{f1 * 100:.2f}%")
 
     # Confusion Matrix
     cm = confusion_matrix(y_test, y_pred)
